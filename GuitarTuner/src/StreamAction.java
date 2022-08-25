@@ -6,10 +6,6 @@ public class StreamAction extends AbstractAction {
     Mic m;
 
     public StreamAction(){
-        m = new Mic();
-
-
-
     }
 
 
@@ -18,20 +14,16 @@ public class StreamAction extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         JToggleButton toggle = (JToggleButton)e.getSource();
         if(toggle.isSelected()){
+            m = new Mic();
             System.out.println("Streaming Started");
             m.startRecording();
-            m.openMicrophone();
-            m.targetThread.start();
-            m.sourceThread.start();
-
         }
         else{
+            System.out.println("Streaming Ended");
+            m.sourceLine.stop();
+            m.sourceLine.close();
             m.targetLine.stop();
             m.targetLine.close();
-            System.out.println("Streaming Ended");
-
-
         }
-
     }
 }
