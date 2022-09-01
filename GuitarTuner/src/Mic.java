@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 import java.text.DecimalFormat;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -58,8 +53,9 @@ public class Mic implements Runnable {
         float lastPeak = 0.0F;
 
 
+        // Decode Audio Bytes (PCM), calculate RMS Amplitude
         for(int b; (b = targetLine.read(data, 0, data.length)) > -1;) {
-            this.sourceLine.write(this.data, 0, this.data.length);
+            sourceLine.write(data, 0, data.length);
             for(int i = 0, s = 0; i < b;) {
                 int sample = 0;
 
@@ -90,7 +86,7 @@ public class Mic implements Runnable {
 
             lastPeak = peak;
             updateAudioBar(rms, peak);
-            System.out.println("" + rms + " " + peak);
+            //System.out.println("" + rms + " " + peak);
         }
 
     }
@@ -103,5 +99,4 @@ public class Mic implements Runnable {
             }
         });
     }
-
 }

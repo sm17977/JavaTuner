@@ -6,8 +6,10 @@ import java.awt.event.ActionEvent;
 public class StreamAction extends AbstractAction {
 
     Mic m;
+    AudioBar bar;
 
-    public StreamAction(){
+    public StreamAction(AudioBar bar){
+        this.bar = bar;
     }
 
 
@@ -16,8 +18,8 @@ public class StreamAction extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         JToggleButton toggle = (JToggleButton)e.getSource();
         if(toggle.isSelected()){
-            m = new Mic(new AudioBar());
             System.out.println("Streaming Started");
+            new Thread(new Mic(bar)).start();
         }
         else{
             System.out.println("Streaming Ended");
