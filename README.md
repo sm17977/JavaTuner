@@ -17,8 +17,8 @@ A desktop GUI Guitar Tuner developed with Java Swing
 2. Setup GUI components
 3. Read audio using a DataLine  :heavy_check_mark:
 4. Write audio into Byte array  :heavy_check_mark:
-5. Implement Actions for JButtons
-6. Research sound properties for classification/detection
+5. Implement Actions for JButtons :heavy_check_mark:
+6. Implement Pitch Detection (Autocorrelation/Mcleod Pitch Method?)
 
 ## Resources
 FlatLaf Swing UI Theme: https://www.formdev.com/flatlaf/
