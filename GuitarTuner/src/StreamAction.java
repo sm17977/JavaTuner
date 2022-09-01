@@ -1,3 +1,5 @@
+
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
@@ -14,9 +16,8 @@ public class StreamAction extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         JToggleButton toggle = (JToggleButton)e.getSource();
         if(toggle.isSelected()){
-            m = new Mic();
+            m = new Mic(new AudioBar());
             System.out.println("Streaming Started");
-            m.startRecording();
         }
         else{
             System.out.println("Streaming Ended");
