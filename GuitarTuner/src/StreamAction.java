@@ -1,21 +1,15 @@
-
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
 
 public class StreamAction extends AbstractAction {
-
-    Mic m;
-    AudioBar bar;
-    PitchLabel label;
+    private Mic m;
+    private final AudioBar bar;
+    private final PitchLabel label;
 
     public StreamAction(AudioBar bar,  PitchLabel label){
         this.bar = bar;
         this.label = label;
     }
-
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -26,25 +20,24 @@ public class StreamAction extends AbstractAction {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    m = new Mic(bar, label);
+                    m = new Mic(StreamAction.this);
                 }
             });
-
-
         }
         else{
             toggle.setText("Start Recording");
-            System.out.println("Streaming Ended");
-            try {
-                m.sourceLine.stop();
-                m.sourceLine.close();
-                m.targetLine.stop();
-                m.targetLine.close();
-                m.inputStream.close();
-            } catch (IOException | NullPointerException ex) {
-                Thread.currentThread().interrupt();
-            }
-
+            System.out.println("Recording Ended");
+            m.stopRecording();
+            updateLabel("Stopped Recording");
         }
+    }
+
+    public void updateLabel(String str){
+        label.setText(str);
+    }
+
+    public void updateAudioBar(float rms, float peak) {
+        bar.setPeak(peak);
+        bar.setAmplitude(rms);
     }
 }

@@ -3,81 +3,61 @@ import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.io.jvm.JVMAudioInputStream;
 import be.tarsos.dsp.pitch.*;
 
-import java.text.DecimalFormat;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.TargetDataLine;
-import javax.swing.SwingUtilities;
 
 public class Mic implements PitchDetectionHandler {
-    public AudioFormat format;
-    public TargetDataLine targetLine;
-    public SourceDataLine sourceLine;
-    public AudioInputStream inputStream;
-    public byte[] data;
-    public DecimalFormat df;
-    public AudioBar bar;
-    public PitchLabel pitchLabel;
+    private TargetDataLine targetLine;
+    private AudioInputStream inputStream;
+    private final StreamAction streamAction;
+    private static AudioDispatcher dispatcher;
+    private float lastPeak = 0f;
 
-    public Mic(AudioBar bar, PitchLabel pitchLabel) {
-        this.bar = bar;
-        this.pitchLabel = pitchLabel;
+    public Mic(StreamAction streamAction) {
+        this.streamAction = streamAction;
         this.initDataLines();
-        this.run();
-        this.data = new byte[2048];
-        this.df = new DecimalFormat("#.00");
+        this.startRecording();
     }
-    public void initDataLines() {
-        format = new AudioFormat(44100.0F, 16, 2, true, false);
+    private void initDataLines() {
+        AudioFormat format = new AudioFormat(44100.0F, 16, 2, true, false);
 
         try {
-            DataLine.Info info = new DataLine.Info(SourceDataLine.class, this.format);
-            sourceLine = (SourceDataLine)AudioSystem.getLine(info);
-            sourceLine.open();
-
-            info = new DataLine.Info(TargetDataLine.class, this.format);
+            DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
             targetLine = (TargetDataLine)AudioSystem.getLine(info);
             targetLine.open();
-
             inputStream = new AudioInputStream(targetLine);
 
         } catch (LineUnavailableException e) {
             e.printStackTrace();
         }
     }
-    public void run()  {
+    private void startRecording()  {
         JVMAudioInputStream audioInputStream = new JVMAudioInputStream(inputStream);
-
-        sourceLine.start();
         targetLine.start();
 
         float sampleRate = 44100;
         int bufferSize = 1024;
         int overlap = 0;
 
-        AudioDispatcher dispatcher = new AudioDispatcher(audioInputStream, bufferSize, overlap);
+        dispatcher = new AudioDispatcher(audioInputStream, bufferSize, overlap);
         dispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.YIN, sampleRate, bufferSize, this));
-        new Thread(dispatcher,"Audio dispatching").start();
+        new Thread(dispatcher).start();
     }
 
-    public void updateAudioBar(final float rms, final float peak) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                bar.setPeak(peak);
-                bar.setAmplitude(rms);
-            }
-        });
+    public void stopRecording(){
+        dispatcher.stop();
+        targetLine.close();
+        targetLine.stop();
     }
 
     @Override
     public void handlePitch(PitchDetectionResult pitchDetectionResult, AudioEvent audioEvent) {
-        audioEvent.isSilence(1);
+        audioEvent.isSilence(0.5);
         float[] samples = audioEvent.getFloatBuffer();
-        float lastPeak = 0f;
         float peak = 0f;
 
         for(float sample : samples) {
@@ -91,14 +71,13 @@ public class Mic implements PitchDetectionHandler {
         }
 
         lastPeak = peak;
-        updateAudioBar((float)audioEvent.getRMS(), peak);
+        streamAction.updateAudioBar((float)audioEvent.getRMS(), peak);
 
         if(pitchDetectionResult.getPitch() != -1){
             double timeStamp = audioEvent.getTimeStamp();
             float pitch = pitchDetectionResult.getPitch();
-            float probability = pitchDetectionResult.getProbability();
-            double rms = audioEvent.getRMS() * 100;
-            pitchLabel.setText(String.format("Pitch detected at %.2fs: %.2fHz\n", timeStamp,pitch));
+            //float probability = pitchDetectionResult.getProbability();
+            streamAction.updateLabel((String.format("Pitch detected at %.2fs: %.2fHz\n", timeStamp, pitch)));
         }
     }
 }
