@@ -2,15 +2,16 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 
 public class StreamAction extends AbstractAction {
-    private Mic m;
     private final AudioBar bar;
     private final PitchLabel label;
+    private Mic m;
 
     public StreamAction(AudioBar bar,  PitchLabel label){
         this.bar = bar;
         this.label = label;
     }
 
+    // Stop/Start recording button
     @Override
     public void actionPerformed(ActionEvent e) {
         JToggleButton toggle = (JToggleButton)e.getSource();
@@ -36,8 +37,7 @@ public class StreamAction extends AbstractAction {
         label.setText(str);
     }
 
-    public void updateAudioBar(float rms, float peak) {
-        bar.setPeak(peak);
+    public void updateAudioBar(float rms) {
         bar.setAmplitude(rms);
     }
 }

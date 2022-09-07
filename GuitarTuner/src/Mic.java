@@ -9,22 +9,31 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
+import java.util.*;
 
-public class Mic implements PitchDetectionHandler {
+public class Mic {
+    private static AudioDispatcher dispatcher;
+    private final Pitch pitch;
+
+    private final Map<Float, String> stdTunings = Map.of(
+            82f, "E2",
+            110f, "A2",
+            147f, "D3",
+            196f, "G3",
+            247f, "B3",
+            330f, "E4"
+    );
     private TargetDataLine targetLine;
     private AudioInputStream inputStream;
-    private final StreamAction streamAction;
-    private static AudioDispatcher dispatcher;
-    private float lastPeak = 0f;
 
     public Mic(StreamAction streamAction) {
-        this.streamAction = streamAction;
+        pitch = new Pitch(streamAction);
         this.initDataLines();
         this.startRecording();
     }
+
     private void initDataLines() {
         AudioFormat format = new AudioFormat(44100.0F, 16, 2, true, false);
-
         try {
             DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
             targetLine = (TargetDataLine)AudioSystem.getLine(info);
@@ -35,16 +44,17 @@ public class Mic implements PitchDetectionHandler {
             e.printStackTrace();
         }
     }
+
     private void startRecording()  {
         JVMAudioInputStream audioInputStream = new JVMAudioInputStream(inputStream);
         targetLine.start();
 
         float sampleRate = 44100;
-        int bufferSize = 1024;
+        int bufferSize = 6000;
         int overlap = 0;
 
         dispatcher = new AudioDispatcher(audioInputStream, bufferSize, overlap);
-        dispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.YIN, sampleRate, bufferSize, this));
+        dispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.YIN, sampleRate, bufferSize, pitch));
         new Thread(dispatcher).start();
     }
 
@@ -52,32 +62,5 @@ public class Mic implements PitchDetectionHandler {
         dispatcher.stop();
         targetLine.close();
         targetLine.stop();
-    }
-
-    @Override
-    public void handlePitch(PitchDetectionResult pitchDetectionResult, AudioEvent audioEvent) {
-        audioEvent.isSilence(0.5);
-        float[] samples = audioEvent.getFloatBuffer();
-        float peak = 0f;
-
-        for(float sample : samples) {
-            float abs = Math.abs(sample);
-            if (abs > peak) {
-                peak = abs;
-            }
-        }
-        if (lastPeak > peak) {
-            peak = lastPeak * 0.875f;
-        }
-
-        lastPeak = peak;
-        streamAction.updateAudioBar((float)audioEvent.getRMS(), peak);
-
-        if(pitchDetectionResult.getPitch() != -1){
-            double timeStamp = audioEvent.getTimeStamp();
-            float pitch = pitchDetectionResult.getPitch();
-            //float probability = pitchDetectionResult.getProbability();
-            streamAction.updateLabel((String.format("Pitch detected at %.2fs: %.2fHz\n", timeStamp, pitch)));
-        }
     }
 }

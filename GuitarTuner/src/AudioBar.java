@@ -1,18 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
 
+// Using implementation from Radiodef's stackoverflow answer
+// Link: https://stackoverflow.com/questions/26574326/how-to-calculate-the-level-amplitude-db-of-audio-signal-in-java
+
 public class AudioBar extends JComponent {
     private int meterWidth = 10;
     private float amp = 0f;
-    private float peak = 0f;
 
     public void setAmplitude(float amp) {
         this.amp = Math.abs(amp);
-        repaint();
-    }
-
-    public void setPeak(float peak) {
-        this.peak = Math.abs(peak);
         repaint();
     }
 
@@ -37,9 +34,6 @@ public class AudioBar extends JComponent {
         g.setColor(Color.GREEN);
         g.fillRect(x + 1, y + h - 1 - a, w - 2, a);
 
-        int p = Math.round(peak * (h - 2));
-        g.setColor(Color.RED);
-        g.drawLine(x + 1, y + h - 1 - p, x + w - 1, y + h - 1 - p);
     }
 
     @Override
