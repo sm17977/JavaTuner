@@ -12,7 +12,7 @@ public class App {
                 FlatLightLaf.setup();
                 JFrame mainFrame = new JFrame("JavaTuner");
                 mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-                mainFrame.setSize(640, 300);
+                mainFrame.setSize(1024, 600);
 
                 JPanel panel = new JPanel(new BorderLayout());
                 panel.setBorder(new EmptyBorder(25, 50, 25, 50));
@@ -23,14 +23,14 @@ public class App {
 
                 PitchLabel pitchLabel = new PitchLabel("Pitch: ", SwingConstants.CENTER);
 
-                Action streamAction = new StreamAction(bar, pitchLabel);
-                streamAction.putValue(Action.NAME, "Start Recording");
+                Action recordBtnAction = new RecordButtonAction(bar, pitchLabel);
+                recordBtnAction.putValue(Action.NAME, "Start Recording");
 
-                JToggleButton startStream = new JToggleButton(streamAction);
+                JToggleButton recordBtn = new JToggleButton(recordBtnAction);
 
                 panel.add(pitchLabel, BorderLayout.CENTER);
                 mainFrame.setContentPane(panel);
-                mainFrame.add(startStream, BorderLayout.WEST);
+                mainFrame.add(recordBtn, BorderLayout.WEST);
                 mainFrame.setVisible(true);
             }
         });

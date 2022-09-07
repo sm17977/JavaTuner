@@ -1,4 +1,5 @@
 import be.tarsos.dsp.AudioDispatcher;
+import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.io.jvm.JVMAudioInputStream;
 import be.tarsos.dsp.pitch.*;
 
@@ -10,23 +11,23 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 import java.util.*;
 
-public class Mic {
+public class Mic{
+    private final RecordButtonAction recordButtonAction;
     private static AudioDispatcher dispatcher;
-    private final Pitch pitch;
 
-    private final Map<Float, String> stdTunings = Map.of(
-            82f, "E2",
-            110f, "A2",
-            147f, "D3",
-            196f, "G3",
-            247f, "B3",
-            330f, "E4"
-    );
+//    private final Map<Float, String> stdTunings = Map.of(
+//            82f, "E2",
+//            110f, "A2",
+//            147f, "D3",
+//            196f, "G3",
+//            247f, "B3",
+//            330f, "E4"
+//    );
     private TargetDataLine targetLine;
     private AudioInputStream inputStream;
 
     public Mic(RecordButtonAction recordBtnAction) {
-        pitch = new Pitch(recordBtnAction);
+        this.recordButtonAction = recordBtnAction;
         this.initDataLines();
         this.startRecording();
     }
@@ -45,7 +46,7 @@ public class Mic {
     }
 
     private void startRecording()  {
-        JVMAudioInputStream audioInputStream = new JVMAudioInputStream(inputStream);
+         JVMAudioInputStream audioInputStream = new JVMAudioInputStream(inputStream);
         targetLine.start();
 
         float sampleRate = 44100;
@@ -53,8 +54,8 @@ public class Mic {
         int overlap = 0;
 
         dispatcher = new AudioDispatcher(audioInputStream, bufferSize, overlap);
-        dispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.YIN, sampleRate, bufferSize, pitch));
-        new Thread(dispatcher).start();
+        dispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.YIN, sampleRate, bufferSize, new Pitch(recordButtonAction)));
+        new Thread(dispatcher, "Mic Audio Dispatch Thread").start();
     }
 
     public void stopRecording(){

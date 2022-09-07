@@ -11,19 +11,13 @@ public class RecordButtonAction extends AbstractAction {
         this.label = label;
     }
 
-    // Stop/Start recording button
     @Override
     public void actionPerformed(ActionEvent e) {
         JToggleButton toggle = (JToggleButton)e.getSource();
         if(toggle.isSelected()){
             toggle.setText("Stop Recording");
             System.out.println("Streaming Started");
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    m = new Mic(RecordButtonAction.this);
-                }
-            });
+            m = new Mic(RecordButtonAction.this);
         }
         else{
             toggle.setText("Start Recording");
@@ -32,11 +26,9 @@ public class RecordButtonAction extends AbstractAction {
             updateLabel("Stopped Recording");
         }
     }
-
     public void updateLabel(String str){
         label.setText(str);
     }
-
     public void updateAudioBar(float rms) {
         bar.setAmplitude(rms);
     }

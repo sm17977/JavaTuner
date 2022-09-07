@@ -6,39 +6,35 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 public class Pitch implements PitchDetectionHandler {
-    private final  RecordButtonAction recordBtnAction;
-    private final Queue<Double> count;
-    private double average = 0;
-    public Pitch(RecordButtonAction recordButtonAction){
-        this.recordBtnAction = recordButtonAction;
-        count = new ArrayDeque<Double>();
+    private final int RMS_STORE_SIZE = 10;
+    private final double MIC_AMBIENCE_RMS = 0.000711;
+    private final RecordButtonAction recordBtnAction;
+    private final Queue<Double> previousRMSUnits;
+    private double avgPreviousRMSUnits = 0;
+    public Pitch(RecordButtonAction recordBtnAction){
+        this.recordBtnAction = recordBtnAction;
+        previousRMSUnits = new ArrayDeque<Double>();
     }
 
+    // handlePitch is called after the Mic.startRecording() method, and runs continuously
+    // until Mic.stopRecording() is called
     @Override
     public void handlePitch(PitchDetectionResult pitchDetectionResult, AudioEvent audioEvent) {
-        audioEvent.isSilence(0.5);
-        float[] samples = audioEvent.getFloatBuffer();
-
-        //System.out.println(String.format("%2f: ", audioEvent.getRMS() + 0.5));
-
-        if(count.size() == 10){
-            count.remove();
-            count.add(audioEvent.getRMS());
-            double sum = count.stream().reduce(Double::sum).get();
-            average = sum / 10;
-            System.out.println(String.format("%2f: ", average));
-            //System.out.println(String.format("%2f: ", Collections.min(count)));
+        if(previousRMSUnits.size() == RMS_STORE_SIZE){
+            previousRMSUnits.remove();
+            previousRMSUnits.add(audioEvent.getRMS());
+            double sum = previousRMSUnits.stream().reduce(Double::sum).get();
+            avgPreviousRMSUnits = sum / RMS_STORE_SIZE;
         }
         else{
-            count.add(audioEvent.getTimeStamp());
+            previousRMSUnits.add(audioEvent.getTimeStamp());
         }
 
-        recordBtnAction.updateAudioBar((float) (average + 0.000711) * 5);
+        recordBtnAction.updateAudioBar((float) (avgPreviousRMSUnits + MIC_AMBIENCE_RMS) * 5);
 
         if(pitchDetectionResult.getPitch() != -1){
             double timeStamp = audioEvent.getTimeStamp();
             float pitch = pitchDetectionResult.getPitch();
-            //float probability = pitchDetectionResult.getProbability();
             recordBtnAction.updateLabel((String.format("Pitch detected at %.2fs: %.2fHz\n", timeStamp, pitch*2)));
         }
     }
