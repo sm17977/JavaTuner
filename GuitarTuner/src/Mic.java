@@ -1,5 +1,4 @@
 import be.tarsos.dsp.AudioDispatcher;
-import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.io.jvm.JVMAudioInputStream;
 import be.tarsos.dsp.pitch.*;
 
@@ -26,8 +25,8 @@ public class Mic {
     private TargetDataLine targetLine;
     private AudioInputStream inputStream;
 
-    public Mic(StreamAction streamAction) {
-        pitch = new Pitch(streamAction);
+    public Mic(RecordButtonAction recordBtnAction) {
+        pitch = new Pitch(recordBtnAction);
         this.initDataLines();
         this.startRecording();
     }

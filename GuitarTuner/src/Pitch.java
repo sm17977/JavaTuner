@@ -6,11 +6,11 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 public class Pitch implements PitchDetectionHandler {
-    private final StreamAction streamAction;
+    private final  RecordButtonAction recordBtnAction;
     private final Queue<Double> count;
     private double average = 0;
-    public Pitch(StreamAction streamAction){
-        this.streamAction = streamAction;
+    public Pitch(RecordButtonAction recordButtonAction){
+        this.recordBtnAction = recordButtonAction;
         count = new ArrayDeque<Double>();
     }
 
@@ -33,14 +33,13 @@ public class Pitch implements PitchDetectionHandler {
             count.add(audioEvent.getTimeStamp());
         }
 
-        streamAction.updateAudioBar((float) (average + 0.000711) * 5);
+        recordBtnAction.updateAudioBar((float) (average + 0.000711) * 5);
 
         if(pitchDetectionResult.getPitch() != -1){
             double timeStamp = audioEvent.getTimeStamp();
             float pitch = pitchDetectionResult.getPitch();
             //float probability = pitchDetectionResult.getProbability();
-            streamAction.updateLabel((String.format("Pitch detected at %.2fs: %.2fHz\n", timeStamp, pitch*2)));
+            recordBtnAction.updateLabel((String.format("Pitch detected at %.2fs: %.2fHz\n", timeStamp, pitch*2)));
         }
-
     }
 }

@@ -1,12 +1,12 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
-public class StreamAction extends AbstractAction {
+public class RecordButtonAction extends AbstractAction {
     private final AudioBar bar;
     private final PitchLabel label;
     private Mic m;
 
-    public StreamAction(AudioBar bar,  PitchLabel label){
+    public RecordButtonAction(AudioBar bar,  PitchLabel label){
         this.bar = bar;
         this.label = label;
     }
@@ -21,7 +21,7 @@ public class StreamAction extends AbstractAction {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    m = new Mic(StreamAction.this);
+                    m = new Mic(RecordButtonAction.this);
                 }
             });
         }
