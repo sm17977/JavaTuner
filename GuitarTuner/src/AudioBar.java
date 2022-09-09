@@ -5,6 +5,7 @@ import java.awt.*;
 // Link: https://stackoverflow.com/questions/26574326/how-to-calculate-the-level-amplitude-db-of-audio-signal-in-java
 
 public class AudioBar extends JComponent {
+
     private int meterWidth = 10;
     private float amp = 0f;
 
@@ -19,6 +20,7 @@ public class AudioBar extends JComponent {
 
     @Override
     protected void paintComponent(Graphics g) {
+
         int w = Math.min(meterWidth, getWidth());
         int h = getHeight();
         int x = getWidth() / 2 - w / 2;

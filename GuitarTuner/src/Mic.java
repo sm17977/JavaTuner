@@ -9,20 +9,12 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
+import javax.swing.*;
 import java.util.*;
 
 public class Mic{
     private final RecordButtonAction recordButtonAction;
     private static AudioDispatcher dispatcher;
-
-//    private final Map<Float, String> stdTunings = Map.of(
-//            82f, "E2",
-//            110f, "A2",
-//            147f, "D3",
-//            196f, "G3",
-//            247f, "B3",
-//            330f, "E4"
-//    );
     private TargetDataLine targetLine;
     private AudioInputStream inputStream;
 
@@ -46,7 +38,7 @@ public class Mic{
     }
 
     private void startRecording()  {
-         JVMAudioInputStream audioInputStream = new JVMAudioInputStream(inputStream);
+        JVMAudioInputStream audioInputStream = new JVMAudioInputStream(inputStream);
         targetLine.start();
 
         float sampleRate = 44100;
@@ -56,6 +48,7 @@ public class Mic{
         dispatcher = new AudioDispatcher(audioInputStream, bufferSize, overlap);
         dispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.YIN, sampleRate, bufferSize, new Pitch(recordButtonAction)));
         new Thread(dispatcher, "Mic Audio Dispatch Thread").start();
+
     }
 
     public void stopRecording(){
