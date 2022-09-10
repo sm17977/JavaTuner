@@ -7,7 +7,6 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 
 public class CircleButton extends JToggleButton {
-
     private final Font f = new Font("Segoe UI", Font.PLAIN, 60);
     private boolean mouseOver = false;
     private boolean mousePressed = false;
@@ -17,14 +16,11 @@ public class CircleButton extends JToggleButton {
         setOpaque(false);
         setFocusPainted(false);
         setBorderPainted(false);
-
-
         MouseAdapter mouseListener = new MouseAdapter(){
 
             @Override
             public void mousePressed(MouseEvent me){
                 if(contains(me.getX(), me.getY())){
-
                     mousePressed = true;
                     repaint();
                 }
@@ -46,7 +42,6 @@ public class CircleButton extends JToggleButton {
             @Override
             public void mouseMoved(MouseEvent me){
                 mouseOver = contains(me.getX(), me.getY());
-                System.out.println(isSelected());
                 repaint();
             }
         };
@@ -54,8 +49,6 @@ public class CircleButton extends JToggleButton {
         addMouseListener(mouseListener);
         addMouseMotionListener(mouseListener);
     }
-
-
 
     private int getDiameter(){
         int diameter = Math.min(getWidth(), getHeight());
@@ -72,13 +65,9 @@ public class CircleButton extends JToggleButton {
         RenderingHints hints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHints(hints);
 
-
         if(isSelected()){
             g2.setColor(Color.RED);
         }
-
-
-
 
         g2.fillOval(getWidth()/2 - radius, getHeight()/2 - radius, diameter, diameter);
 
