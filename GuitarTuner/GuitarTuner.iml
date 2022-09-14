@@ -4,8 +4,14 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <excludePattern pattern="Mic2.java" />
     </content>
     <orderEntry type="inheritedJdk" />
+    <orderEntry type="library" name="flatlaf-2.4" level="project" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="TarsosDSP-latest" level="project" />
+    <orderEntry type="library" name="miglayout-swing-4.3-20121116.151626-3" level="project" />
+    <orderEntry type="library" name="miglayout-core-4.3-20121116.151612-3" level="project" />
+    <orderEntry type="library" name="src" level="project" />
   </component>
 </module>

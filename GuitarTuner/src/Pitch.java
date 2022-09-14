@@ -51,7 +51,9 @@ public class Pitch implements PitchDetectionHandler {
             previousRMSUnits.add(audioEvent.getTimeStamp());
         }
 
-        recordBtnAction.updateAudioBar((float) (avgPreviousRMSUnits + MIC_AMBIENCE_RMS) * 5);
+        if(80 > audioEvent.getdBSPL() && audioEvent.getdBSPL() < 1200) {
+            recordBtnAction.updateAudioBar((float) (audioEvent.getRMS() + MIC_AMBIENCE_RMS) * 20);
+        }
 
         if(pitchDetectionResult.getPitch() != -1){
             double timeStamp = audioEvent.getTimeStamp();

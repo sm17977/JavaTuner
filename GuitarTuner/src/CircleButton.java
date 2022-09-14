@@ -7,12 +7,16 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 
 public class CircleButton extends JToggleButton {
-    private final Font f = new Font("Segoe UI", Font.PLAIN, 60);
+    private Font f;
     private boolean mouseOver = false;
     private boolean mousePressed = false;
-    public CircleButton(String text){
-        super.setText(text);
-        setFont(f);
+
+
+    public CircleButton(String text, Action action){
+        super();
+        setAction(action);
+        setFont(f = new Font("Segoe UI", Font.PLAIN, 60));
+        setText(text);
         setOpaque(false);
         setFocusPainted(false);
         setBorderPainted(false);

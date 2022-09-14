@@ -15,12 +15,10 @@
         public void actionPerformed(ActionEvent e) {
             JToggleButton toggle = (JToggleButton)e.getSource();
             if(toggle.isSelected()){
-                toggle.setText("Stop Recording");
                 System.out.println("Streaming Started");
                 m = new Mic(RecordButtonAction.this);
             }
             else{
-                toggle.setText("Start Recording");
                 System.out.println("Recording Ended");
                 m.stopRecording();
                 updateLabel("");

@@ -19,11 +19,11 @@ public class App {
                 mainFrame.setSize(1024, 600);
                 JPanel panel = new JPanel(new MigLayout("align 50% 50%",
                         "[center]",
-                        "[grow][]"));
+                        "[grow][][]"));
 
                 // Audio Volume Bar
                 AudioBar bar = new AudioBar();
-                bar.setPreferredSize(new Dimension(20, 100));
+                bar.setPreferredSize(new Dimension((int) (mainFrame.getWidth() * 0.8), 20));
 
                 // Pitch Detection Panel
                 CirclePanel circlePanel = new CirclePanel(300,300);
@@ -31,13 +31,16 @@ public class App {
                 circlePanel.setLayout(new GridBagLayout());
                 circlePanel.add(pitchLabel);
 
+                Action recordBtnAction = new RecordButtonAction(bar, pitchLabel);
+
                 // Guitar String Buttons
-                CircleButton button1 = new CircleButton("E");
-                CircleButton button2 = new CircleButton("A");
-                CircleButton button3 = new CircleButton("D");
-                CircleButton button4 = new CircleButton("G");
-                CircleButton button5 = new CircleButton("B");
-                CircleButton button6 = new CircleButton("E");
+                CircleButton button1 = new CircleButton("E", recordBtnAction);
+
+                CircleButton button2 = new CircleButton("A", recordBtnAction);
+                CircleButton button3 = new CircleButton("D", recordBtnAction);
+                CircleButton button4 = new CircleButton("G", recordBtnAction);
+                CircleButton button5 = new CircleButton("B", recordBtnAction);
+                CircleButton button6 = new CircleButton("E", recordBtnAction);
 
                 ButtonGroup btnGroup = new ButtonGroup();
                 btnGroup.add(button1);
@@ -46,11 +49,6 @@ public class App {
                 btnGroup.add(button4);
                 btnGroup.add(button5);
                 btnGroup.add(button6);
-
-                Action recordBtnAction = new RecordButtonAction(bar, pitchLabel);
-                recordBtnAction.putValue(Action.NAME, "Auto");
-
-                JToggleButton recordBtn = new JToggleButton(recordBtnAction);
 
                 // Guitar Headstock Graphic
                 JImage guitarImg = new JImage(new File("C:\\Users\\Sean\\Desktop\\JavaTuner\\GuitarTuner\\src\\guitarHeadstock.png"), 225, 50);
@@ -64,8 +62,7 @@ public class App {
                 mainFrame.add(button5, "gapleft 30");
                 mainFrame.add(button6, "gapleft 30, wrap");
                 mainFrame.add(guitarImg, String.format("w %d!, h %d!, split", guitarImg.getWidth(), guitarImg.getHeight()));
-                mainFrame.add(circlePanel);
-                mainFrame.add(recordBtn);
+                mainFrame.add(circlePanel, "wrap");
                 mainFrame.add(bar);
 
                 mainFrame.getContentPane().setBackground(Color.LIGHT_GRAY);
