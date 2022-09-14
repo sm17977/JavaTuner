@@ -51,7 +51,7 @@ public class App {
                 btnGroup.add(button6);
 
                 // Guitar Headstock Graphic
-                JImage guitarImg = new JImage(new File("C:\\Users\\Sean\\Desktop\\JavaTuner\\GuitarTuner\\src\\guitarHeadstock.png"), 225, 50);
+                JImage guitarImg = new JImage(new File("src/guitarHeadstock.png"), 225, 50);
                 guitarImg.setLayout(new MigLayout());
 
                 mainFrame.setContentPane(panel);
