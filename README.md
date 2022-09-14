@@ -3,7 +3,7 @@ A desktop GUI Guitar Tuner developed with Java Swing
 
 ## Program Base Functionality
 * GUI Components
-  * Automatic button to detect string automatically
+  * Auto Jbutton to detect string automatically
   * 6 Guitar string JButtons for individual string tuning 
   * Tuning JComboBox selection (standard, drop d, open g etc.)
 * Read audio from system microphone in real-time 
@@ -25,7 +25,8 @@ A desktop GUI Guitar Tuner developed with Java Swing
 7. Add button animations
 8. Add auto mode button
 9. Code auto and manual mode in Pitch detection class
-10. Make sound bar look pretty
+10. Add sound bar to visualise microphone feedback :heavy_check_mark:
+11. Make sound bar look pretty
 
 ## Resources
 FlatLaf Swing UI Theme: https://www.formdev.com/flatlaf/
