@@ -3,13 +3,13 @@ A desktop GUI Guitar Tuner developed with Java Swing
 
 ## Program Base Functionality
 * GUI Components
-  * Stream audio JToggleButton
-  * Guitar String JButton (for each string) 
-  * Tuning (standard, drop-d etc.) JComboBox
+  * Automatic button to detect string automatically
+  * 6 Guitar string JButtons for individual string tuning 
+  * Tuning JComboBox selection (standard, drop d, open g etc.)
 * Read audio from system microphone in real-time 
 * Write audio to byte array
-* Detect guitar sound in byte array
-* Classify sound in relation to string + tuning selection
+* Detect pitch
+* Classify current pitch in relation to current string + tuning selection
 
 
 ## To do
@@ -23,7 +23,7 @@ A desktop GUI Guitar Tuner developed with Java Swing
 5. Implement Pitch Detection (YIN Algorithm from TarsosDSP) :heavy_check_mark:
 6. Create buttons for each guitar string :heavy_check_mark:
 7. Add button animations
-8. Add auto and manual mode buttons
+8. Add auto mode button
 9. Code auto and manual mode in Pitch detection class
 10. Make sound bar look pretty
 
