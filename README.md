@@ -23,7 +23,7 @@ A desktop GUI Guitar Tuner developed with Java Swing
 5. Implement Pitch Detection (YIN Algorithm from TarsosDSP) :heavy_check_mark:
 6. Create buttons for each guitar string :heavy_check_mark:
 7. Add button animations
-8. Add auto mode button
+8. Add auto mode button :heavy_check_mark:
 9. Code auto and manual mode in Pitch detection class
 10. Add sound bar to visualise microphone feedback :heavy_check_mark:
 11. Make sound bar look pretty
