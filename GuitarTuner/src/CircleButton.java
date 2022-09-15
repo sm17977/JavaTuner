@@ -20,6 +20,7 @@ public class CircleButton extends JToggleButton {
         setOpaque(false);
         setFocusPainted(false);
         setBorderPainted(false);
+        setCursor(new Cursor(Cursor.HAND_CURSOR));
         MouseAdapter mouseListener = new MouseAdapter(){
 
             @Override

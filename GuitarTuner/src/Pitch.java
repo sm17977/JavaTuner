@@ -15,6 +15,8 @@ public class Pitch implements PitchDetectionHandler {
     private final RecordButtonAction recordBtnAction;
     private final Queue<Double> previousRMSUnits;
 
+    private static boolean manualModeSelected;
+
     private final Map<Float, String> stdTunings = Map.of(
             50f, "",
             82f, "E2",

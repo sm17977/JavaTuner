@@ -17,9 +17,27 @@ public class App {
                 JFrame mainFrame = new JFrame("JavaTuner");
                 mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
                 mainFrame.setSize(1024, 600);
+
+                JMenuBar menuBar = new JMenuBar();
+                JMenu menu = new JMenu("Guitar Tunings");
+
+                ButtonGroup tuningSelectionGroup = new ButtonGroup();
+                JRadioButtonMenuItem rbMenuItem = new JRadioButtonMenuItem("Standard");
+                rbMenuItem.setSelected(true);
+                tuningSelectionGroup.add(rbMenuItem);
+                menu.add(rbMenuItem);
+
+                rbMenuItem = new JRadioButtonMenuItem("Drop D");
+                tuningSelectionGroup.add(rbMenuItem);
+                menu.add(rbMenuItem);
+
+
+
+                menuBar.add(menu);
+
                 JPanel panel = new JPanel(new MigLayout("align 50% 50%",
                         "[center]",
-                        "[grow][][]"));
+                        "20[grow][][]"));
 
                 // Audio Volume Bar
                 AudioBar bar = new AudioBar();
@@ -35,12 +53,21 @@ public class App {
 
                 // Guitar String Buttons
                 CircleButton button1 = new CircleButton("E", recordBtnAction);
-
                 CircleButton button2 = new CircleButton("A", recordBtnAction);
                 CircleButton button3 = new CircleButton("D", recordBtnAction);
                 CircleButton button4 = new CircleButton("G", recordBtnAction);
                 CircleButton button5 = new CircleButton("B", recordBtnAction);
                 CircleButton button6 = new CircleButton("E", recordBtnAction);
+
+                SwitchButton button7 = new SwitchButton();
+
+                JPanel autoBtnPanel = new JPanel(new GridBagLayout());
+                autoBtnPanel.setBackground(Color.ORANGE);
+                JLabel autoLabel = new JLabel("Auto  ");
+                autoLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
+
+                autoBtnPanel.add(autoLabel);
+                autoBtnPanel.add(button7);
 
                 ButtonGroup btnGroup = new ButtonGroup();
                 btnGroup.add(button1);
@@ -55,17 +82,20 @@ public class App {
                 guitarImg.setLayout(new MigLayout());
 
                 mainFrame.setContentPane(panel);
-                mainFrame.add(button1, "split, gapleft 30");
+                mainFrame.add(button1, "split, gapleft 80");
                 mainFrame.add(button2, "gapleft 30");
                 mainFrame.add(button3, "gapleft 30");
                 mainFrame.add(button4, "gapleft 30");
                 mainFrame.add(button5, "gapleft 30");
-                mainFrame.add(button6, "gapleft 30, wrap");
+                mainFrame.add(button6, "gapleft 30");
+                mainFrame.add(autoBtnPanel, "gapleft 35, wrap");
                 mainFrame.add(guitarImg, String.format("w %d!, h %d!, split", guitarImg.getWidth(), guitarImg.getHeight()));
                 mainFrame.add(circlePanel, "wrap");
                 mainFrame.add(bar);
 
-                mainFrame.getContentPane().setBackground(Color.LIGHT_GRAY);
+                mainFrame.setJMenuBar(menuBar);
+
+                mainFrame.getContentPane().setBackground(Color.ORANGE);
                 panel.setBorder(BorderFactory.createLineBorder(Color.black));
                 mainFrame.setVisible(true);
             }
