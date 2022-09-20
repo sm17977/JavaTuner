@@ -7,7 +7,10 @@ import java.awt.*;
 import java.io.File;
 
 public class App {
+
+
     public static void main(String[] args) {
+
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -30,9 +33,6 @@ public class App {
                 rbMenuItem = new JRadioButtonMenuItem("Drop D");
                 tuningSelectionGroup.add(rbMenuItem);
                 menu.add(rbMenuItem);
-
-
-
                 menuBar.add(menu);
 
                 JPanel panel = new JPanel(new MigLayout("align 50% 50%",
@@ -51,6 +51,10 @@ public class App {
 
                 Action recordBtnAction = new RecordButtonAction(bar, pitchLabel);
 
+                // Auto button
+                SwitchButton button7 = new SwitchButton();
+                button7.setSelected(true);
+
                 // Guitar String Buttons
                 CircleButton button1 = new CircleButton("E", recordBtnAction);
                 CircleButton button2 = new CircleButton("A", recordBtnAction);
@@ -59,7 +63,6 @@ public class App {
                 CircleButton button5 = new CircleButton("B", recordBtnAction);
                 CircleButton button6 = new CircleButton("E", recordBtnAction);
 
-                SwitchButton button7 = new SwitchButton();
 
                 JPanel autoBtnPanel = new JPanel(new GridBagLayout());
                 autoBtnPanel.setBackground(Color.ORANGE);
@@ -76,6 +79,8 @@ public class App {
                 btnGroup.add(button4);
                 btnGroup.add(button5);
                 btnGroup.add(button6);
+
+
 
                 // Guitar Headstock Graphic
                 JImage guitarImg = new JImage(new File("src/guitarHeadstock.png"), 225, 50);

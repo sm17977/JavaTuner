@@ -6,10 +6,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 
-public class CircleButton extends JToggleButton {
+public class CircleButton extends JToggleButton  {
     private Font f;
     private boolean mouseOver = false;
     private boolean mousePressed = false;
+    private App app;
 
 
     public CircleButton(String text, Action action){
@@ -90,5 +91,7 @@ public class CircleButton extends JToggleButton {
         int minDiameter = 10 + Math.max(metrics.stringWidth(getText()), metrics.getHeight());
         return new Dimension(minDiameter, minDiameter);
     }
+
+
 }
 

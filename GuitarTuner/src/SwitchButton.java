@@ -1,18 +1,25 @@
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.*;
+import java.util.List;
 
-public class SwitchButton extends Component {
+public class SwitchButton extends JComponent {
     private Timer timer;
     private float location;
-    private boolean isSelected;
+    private boolean selected;
     private boolean mouseOver;
     private float speed = 0.4f;
+    private boolean isAuto;
+
 
     public SwitchButton(){
+        this.isAuto = isAuto;
         setBackground(Color.RED);
         setPreferredSize(new Dimension(50, 25));
         setForeground(Color.WHITE);
@@ -22,7 +29,7 @@ public class SwitchButton extends Component {
         timer = new Timer(0, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(isSelected){
+                if(isSelected()){
                     int endLocation = getWidth() - getHeight();
                     if(location < endLocation){
                         location += speed;
@@ -62,13 +69,24 @@ public class SwitchButton extends Component {
             public void mouseReleased(MouseEvent e) {
                 if(SwingUtilities.isLeftMouseButton(e)){
                     if(mouseOver){
-                        isSelected = !isSelected;
+                        selected = !selected;
                         timer.start();
                     }
                 }
             }
         });
     }
+
+    public boolean isSelected(){
+        return selected;
+    }
+
+    public void setSelected(boolean selected){
+        this.selected = selected;
+        timer.start();
+    }
+
+
 
     @Override
     public void paint(Graphics g) {
@@ -101,3 +119,4 @@ public class SwitchButton extends Component {
         return  alpha;
     }
 }
+
