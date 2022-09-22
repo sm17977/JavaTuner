@@ -5,10 +5,9 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.io.File;
+import java.util.ArrayList;
 
 public class App {
-
-
     public static void main(String[] args) {
 
         EventQueue.invokeLater(new Runnable() {
@@ -49,20 +48,16 @@ public class App {
                 circlePanel.setLayout(new GridBagLayout());
                 circlePanel.add(pitchLabel);
 
-                Action recordBtnAction = new RecordButtonAction(bar, pitchLabel);
-
                 // Auto button
-                SwitchButton button7 = new SwitchButton();
-                button7.setSelected(true);
+                SwitchButton autoBtn = new SwitchButton(null);
 
                 // Guitar String Buttons
-                CircleButton button1 = new CircleButton("E", recordBtnAction);
-                CircleButton button2 = new CircleButton("A", recordBtnAction);
-                CircleButton button3 = new CircleButton("D", recordBtnAction);
-                CircleButton button4 = new CircleButton("G", recordBtnAction);
-                CircleButton button5 = new CircleButton("B", recordBtnAction);
-                CircleButton button6 = new CircleButton("E", recordBtnAction);
-
+                CircleButton string1Btn = new CircleButton("E", null, "S1");
+                CircleButton string2Btn = new CircleButton("A", null, "S2");
+                CircleButton string3Btn = new CircleButton("D", null, "S3");
+                CircleButton string4Btn = new CircleButton("G", null, "S4");
+                CircleButton string5Btn = new CircleButton("B", null, "S5");
+                CircleButton string6Btn = new CircleButton("E", null, "S6");
 
                 JPanel autoBtnPanel = new JPanel(new GridBagLayout());
                 autoBtnPanel.setBackground(Color.ORANGE);
@@ -70,29 +65,38 @@ public class App {
                 autoLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
 
                 autoBtnPanel.add(autoLabel);
-                autoBtnPanel.add(button7);
+                autoBtnPanel.add(autoBtn);
 
-                ButtonGroup btnGroup = new ButtonGroup();
-                btnGroup.add(button1);
-                btnGroup.add(button2);
-                btnGroup.add(button3);
-                btnGroup.add(button4);
-                btnGroup.add(button5);
-                btnGroup.add(button6);
+                ArrayList<JToggleButton> btnGroup = new ArrayList<>();
+                btnGroup.add(string1Btn);
+                btnGroup.add(string2Btn);
+                btnGroup.add(string3Btn);
+                btnGroup.add(string4Btn);
+                btnGroup.add(string5Btn);
+                btnGroup.add(string6Btn);
+                btnGroup.add(autoBtn);
 
+                Action recordBtnAction = new RecordButtonAction(bar, pitchLabel, btnGroup);
 
+                for(JToggleButton btn : btnGroup){
+                    btn.addActionListener(recordBtnAction);
+                }
+
+                autoBtn.timer.start();
+                autoBtn.setSelected(true);
+                autoBtn.setEnabled(false);
 
                 // Guitar Headstock Graphic
                 JImage guitarImg = new JImage(new File("src/guitarHeadstock.png"), 225, 50);
                 guitarImg.setLayout(new MigLayout());
 
                 mainFrame.setContentPane(panel);
-                mainFrame.add(button1, "split, gapleft 80");
-                mainFrame.add(button2, "gapleft 30");
-                mainFrame.add(button3, "gapleft 30");
-                mainFrame.add(button4, "gapleft 30");
-                mainFrame.add(button5, "gapleft 30");
-                mainFrame.add(button6, "gapleft 30");
+                mainFrame.add(string1Btn, "split, gapleft 80");
+                mainFrame.add(string2Btn, "gapleft 30");
+                mainFrame.add(string3Btn, "gapleft 30");
+                mainFrame.add(string4Btn, "gapleft 30");
+                mainFrame.add(string5Btn, "gapleft 30");
+                mainFrame.add(string6Btn, "gapleft 30");
                 mainFrame.add(autoBtnPanel, "gapleft 35, wrap");
                 mainFrame.add(guitarImg, String.format("w %d!, h %d!, split", guitarImg.getWidth(), guitarImg.getHeight()));
                 mainFrame.add(circlePanel, "wrap");

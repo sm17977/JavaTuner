@@ -3,14 +3,9 @@ import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.*;
-import java.util.List;
 
-public class SwitchButton extends JComponent {
-    private Timer timer;
+public class SwitchButton extends JToggleButton {
+    public Timer timer;
     private float location;
     private boolean selected;
     private boolean mouseOver;
@@ -18,8 +13,11 @@ public class SwitchButton extends JComponent {
     private boolean isAuto;
 
 
-    public SwitchButton(){
-        this.isAuto = isAuto;
+    public SwitchButton(Action action){
+        super.setAction(action);
+        super.setOpaque(false);
+        super.setName("Auto");
+        selected = isSelected();
         setBackground(Color.RED);
         setPreferredSize(new Dimension(50, 25));
         setForeground(Color.WHITE);
@@ -42,51 +40,26 @@ public class SwitchButton extends JComponent {
                     }
                 }
                 else{
-                    int endlocation = 2;
-                    if (location > endlocation) {
+                    int endLocation = 2;
+                    if (location > endLocation) {
                         location -= speed;
                         repaint();
                     }
                     else{
                         timer.stop();
-                        location = endlocation;
+                        location = endLocation;
                         repaint();
                     }
                 }
             }
         });
-        addMouseListener(new MouseAdapter() {
+        addActionListener(new ActionListener() {
             @Override
-            public void mouseEntered(MouseEvent e) {
-                mouseOver = true;
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                mouseOver = false;
-            }
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                if(SwingUtilities.isLeftMouseButton(e)){
-                    if(mouseOver){
-                        selected = !selected;
-                        timer.start();
-                    }
-                }
+            public void actionPerformed(ActionEvent e) {
+                timer.start();
             }
         });
     }
-
-    public boolean isSelected(){
-        return selected;
-    }
-
-    public void setSelected(boolean selected){
-        this.selected = selected;
-        timer.start();
-    }
-
-
 
     @Override
     public void paint(Graphics g) {
@@ -105,7 +78,7 @@ public class SwitchButton extends JComponent {
         g2.setColor(getForeground());
         g2.setComposite(AlphaComposite.SrcOver);
         g2.fillOval((int) location, 2, height-4, height-4);
-        super.paint(g2);
+
     }
     private float getAlpha(){
         float width = getWidth() - getHeight();

@@ -13,8 +13,8 @@ public class CircleButton extends JToggleButton  {
     private App app;
 
 
-    public CircleButton(String text, Action action){
-        super();
+    public CircleButton(String text, Action action, String name){
+        setName(name);
         setAction(action);
         setFont(f = new Font("Segoe UI", Font.PLAIN, 60));
         setText(text);
@@ -22,6 +22,7 @@ public class CircleButton extends JToggleButton  {
         setFocusPainted(false);
         setBorderPainted(false);
         setCursor(new Cursor(Cursor.HAND_CURSOR));
+
         MouseAdapter mouseListener = new MouseAdapter(){
 
             @Override
@@ -72,7 +73,8 @@ public class CircleButton extends JToggleButton  {
         g2.setRenderingHints(hints);
 
         if(isSelected()){
-            g2.setColor(Color.RED);
+            g2.setColor(Color.ORANGE.darker());
+            setEnabled(false);
         }
 
         g2.fillOval(getWidth()/2 - radius, getHeight()/2 - radius, diameter, diameter);
