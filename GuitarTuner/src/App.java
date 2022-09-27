@@ -52,12 +52,12 @@ public class App {
                 SwitchButton autoBtn = new SwitchButton(null);
 
                 // Guitar String Buttons
-                CircleButton string1Btn = new CircleButton("E", null, "S1");
-                CircleButton string2Btn = new CircleButton("A", null, "S2");
-                CircleButton string3Btn = new CircleButton("D", null, "S3");
-                CircleButton string4Btn = new CircleButton("G", null, "S4");
-                CircleButton string5Btn = new CircleButton("B", null, "S5");
-                CircleButton string6Btn = new CircleButton("E", null, "S6");
+                CircleButton string1Btn = new CircleButton("E2", null, "S1");
+                CircleButton string2Btn = new CircleButton("A2", null, "S2");
+                CircleButton string3Btn = new CircleButton("D3", null, "S3");
+                CircleButton string4Btn = new CircleButton("G3", null, "S4");
+                CircleButton string5Btn = new CircleButton("B3", null, "S5");
+                CircleButton string6Btn = new CircleButton("E4", null, "S6");
 
                 JPanel autoBtnPanel = new JPanel(new GridBagLayout());
                 autoBtnPanel.setBackground(Color.ORANGE);

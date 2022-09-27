@@ -2,6 +2,8 @@ import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
 
+import javax.swing.*;
+import java.math.BigDecimal;
 import java.util.ArrayDeque;
 import java.util.Map;
 import java.util.Optional;
@@ -15,7 +17,7 @@ public class Pitch implements PitchDetectionHandler {
     private final RecordButtonAction recordBtnAction;
     private final Queue<Double> previousRMSUnits;
 
-    private static boolean manualModeSelected;
+    public static boolean autoModeSelected;
 
     private final Map<Float, String> stdTunings = Map.of(
             50f, "",
@@ -30,6 +32,7 @@ public class Pitch implements PitchDetectionHandler {
     public Pitch(RecordButtonAction recordBtnAction){
         this.recordBtnAction = recordBtnAction;
         previousRMSUnits = new ArrayDeque<Double>();
+        autoModeSelected = true;
     }
 
     // handlePitch is called after the Mic.startRecording() method, and runs continuously
@@ -57,7 +60,7 @@ public class Pitch implements PitchDetectionHandler {
             recordBtnAction.updateAudioBar((float) (audioEvent.getRMS() + MIC_AMBIENCE_RMS) * 20);
         }
 
-        if(pitchDetectionResult.getPitch() != -1){
+        if(pitchDetectionResult.getPitch() != -1){;
             double timeStamp = audioEvent.getTimeStamp();
             float pitch = pitchDetectionResult.getPitch();
 
@@ -68,7 +71,45 @@ public class Pitch implements PitchDetectionHandler {
                     closestNote = tuning;
                 }
             }
-            recordBtnAction.updateLabel((String.format("%s\n", stdTunings.get(closestNote))));
+
+            if(autoModeSelected){
+                recordBtnAction.updateLabel((String.format("%s\n", stdTunings.get(closestNote))));
+            }
+            else{
+                JToggleButton currentSelectedString = getSelectedBtn();
+                String currentGuitarString = currentSelectedString.getText();
+                float targetFrequency = 0;
+                for(Map.Entry<Float, String> tunings : stdTunings.entrySet()){
+                    if(tunings.getValue().equals(currentGuitarString)){
+                        targetFrequency = tunings.getKey();
+                        break;
+                    }
+                }
+                float diff = pitch*2 - targetFrequency;
+                if(Math.abs(diff) > 10){
+                    recordBtnAction.updateLabel("");
+                }
+                else{
+                    System.out.println(diff);
+                    recordBtnAction.updateLabel(round(diff, 2));
+                }
+            }
         }
+    }
+    public static float round(float d, int decimalPlace) {
+        BigDecimal bd = new BigDecimal(Float.toString(d));
+        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+        return bd.floatValue();
+    }
+
+    private JToggleButton getSelectedBtn(){
+        JToggleButton selectedBtn = null;
+        for(JToggleButton btn : recordBtnAction.getButtons()){
+            if(btn.isSelected()){
+                selectedBtn = btn;
+                break;
+            }
+        }
+        return selectedBtn;
     }
 }
