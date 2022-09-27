@@ -27,6 +27,7 @@ A desktop GUI Guitar Tuner developed with Java Swing
 9. Code auto and manual mode in Pitch detection class
 10. Add sound bar to visualise microphone feedback :heavy_check_mark:
 11. Make sound bar look pretty
+12. Add menu bar for selecting alternative tunings
 
 ## Resources
 FlatLaf Swing UI Theme: https://www.formdev.com/flatlaf/
