@@ -25,6 +25,7 @@ public class JImage extends JPanel{
 
     public JImage(File file, int w_margin, int h_margin){
         //setBorder(BorderFactory.createLineBorder(Color.black));
+        setOpaque(false);
         red = new Color(1f, 0f, 0f, 0f);
         setBackground(Color.ORANGE);
         try {

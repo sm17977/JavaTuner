@@ -10,10 +10,13 @@
         private final Mic m;
         private ArrayList<JToggleButton> buttons;
 
-        public RecordButtonAction(AudioBar bar, PitchLabel label, ArrayList<JToggleButton> buttons){
+        private CirclePanel circlePanel;
+
+        public RecordButtonAction(AudioBar bar, PitchLabel label, ArrayList<JToggleButton> buttons, CirclePanel circlePanel){
             this.bar = bar;
             this.label = label;
             this.buttons = buttons;
+            this.circlePanel = circlePanel;
             m = new Mic(RecordButtonAction.this);
         }
 
@@ -87,5 +90,9 @@
         }
         public ArrayList<JToggleButton> getButtons() {
             return buttons;
+        }
+
+        public void updatePitchDial(float freq){
+            circlePanel.setTargetAngle(freq);
         }
     }

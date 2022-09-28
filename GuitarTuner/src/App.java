@@ -17,6 +17,7 @@ public class App {
                 // Setup Main JFrame and JPanel Layout
                 FlatLightLaf.setup();
                 JFrame mainFrame = new JFrame("JavaTuner");
+                mainFrame.setResizable(false);
                 mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
                 mainFrame.setSize(1024, 600);
 
@@ -34,7 +35,7 @@ public class App {
                 menu.add(rbMenuItem);
                 menuBar.add(menu);
 
-                JPanel panel = new JPanel(new MigLayout("align 50% 50%",
+                BackgroundPanel panel =  new BackgroundPanel(new MigLayout("align 50% 50%",
                         "[center]",
                         "20[grow][][]"));
 
@@ -60,7 +61,7 @@ public class App {
                 CircleButton string6Btn = new CircleButton("E4", null, "S6");
 
                 JPanel autoBtnPanel = new JPanel(new GridBagLayout());
-                autoBtnPanel.setBackground(Color.ORANGE);
+                autoBtnPanel.setOpaque(false);
                 JLabel autoLabel = new JLabel("Auto  ");
                 autoLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
 
@@ -76,7 +77,7 @@ public class App {
                 btnGroup.add(string6Btn);
                 btnGroup.add(autoBtn);
 
-                Action recordBtnAction = new RecordButtonAction(bar, pitchLabel, btnGroup);
+                Action recordBtnAction = new RecordButtonAction(bar, pitchLabel, btnGroup, circlePanel);
 
                 for(JToggleButton btn : btnGroup){
                     btn.addActionListener(recordBtnAction);

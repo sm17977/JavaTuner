@@ -20,13 +20,13 @@ public class Pitch implements PitchDetectionHandler {
     public static boolean autoModeSelected;
 
     private final Map<Float, String> stdTunings = Map.of(
-            50f, "",
-            82f, "E2",
-            110f, "A2",
-            147f, "D3",
-            196f, "G3",
-            247f, "B3",
-            330f, "E4"
+            50.0f, "",
+            82.41f, "E2",
+            110.0f, "A2",
+            146.83f, "D3",
+            196.0f, "G3",
+            246.94f, "B3",
+            329.63f, "E4"
     );
     private double avgPreviousRMSUnits = 0;
     public Pitch(RecordButtonAction recordBtnAction){
@@ -63,18 +63,23 @@ public class Pitch implements PitchDetectionHandler {
         if(pitchDetectionResult.getPitch() != -1){;
             double timeStamp = audioEvent.getTimeStamp();
             float pitch = pitchDetectionResult.getPitch();
+            System.out.println(pitch*2);
 
-            for(Float tuning: stdTunings.keySet()){
-                float diff = Math.abs(tuning - (pitch*2));
-                if (diff < min){
-                    min = diff;
-                    closestNote = tuning;
-                }
-            }
-
+            // Detect the guitar string with the closest freq to the audio freq
             if(autoModeSelected){
+                recordBtnAction.updatePitchDial(pitch);
+                float diff = 0;
+                for(Float tuning: stdTunings.keySet()){
+                    diff = Math.abs(tuning - (pitch*2));
+                    if (diff < min){
+                        min = diff;
+                        closestNote = tuning;
+                    }
+                }
+
                 recordBtnAction.updateLabel((String.format("%s\n", stdTunings.get(closestNote))));
             }
+            // Detect how the close audio freq is to selected string freq
             else{
                 JToggleButton currentSelectedString = getSelectedBtn();
                 String currentGuitarString = currentSelectedString.getText();
@@ -90,7 +95,6 @@ public class Pitch implements PitchDetectionHandler {
                     recordBtnAction.updateLabel("");
                 }
                 else{
-                    System.out.println(diff);
                     recordBtnAction.updateLabel(round(diff, 2));
                 }
             }
