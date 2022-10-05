@@ -7,7 +7,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
 public class CirclePanel extends JPanel {
-
     private final Ellipse2D circleBackground;
     private final Dimension preferredSize;
     private float angle;
@@ -71,6 +70,13 @@ public class CirclePanel extends JPanel {
         Polygon dialArm = new Polygon(new int[]{(int) leftBasePoint.getX(), (int) rightBasePoint.getX(), (int) topPoint.getX()},
                 new int[]{(int) leftBasePoint.getY(), (int) rightBasePoint.getY(), (int) topPoint.getY()}, 3);
 
+        if(targetAngle > 90){
+            targetAngle = 90;
+        }
+        if(targetAngle < -90){
+            targetAngle = -90;
+        }
+
         AffineTransform transform = new AffineTransform();
         transform.translate(panelCenterX, panelCenterY);
         transform.rotate(Math.toRadians(angle));
@@ -78,6 +84,12 @@ public class CirclePanel extends JPanel {
         Shape dial = transform.createTransformedShape(dialArm);
 
         g2.fill(dial);
+
+        g2.setColor(Color.BLACK);
+        g2.setFont(new Font("SansSerif", Font.PLAIN, 20));
+        g2.drawString("-10", getWidth() / 5f, getHeight() / 5f);
+        g2.drawString("+10", getWidth() - (getWidth() / 5f) - 40, getHeight() / 5f);
+        g2.drawString("0", (getWidth() / 2f) - 5, (getHeight() / 5f) - 30);
     }
 
     @Override

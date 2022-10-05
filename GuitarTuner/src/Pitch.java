@@ -14,11 +14,10 @@ public class Pitch implements PitchDetectionHandler {
 
     // For testing purposes
     private final double MIC_AMBIENCE_RMS = 0.000711;
+    private final int DIAL_SENSITIVITY = 20;
     private final RecordButtonAction recordBtnAction;
     private final Queue<Double> previousRMSUnits;
-
     public static boolean autoModeSelected;
-
     private final Map<Float, String> stdTunings = Map.of(
             50.0f, "",
             82.41f, "E2",
@@ -63,11 +62,9 @@ public class Pitch implements PitchDetectionHandler {
         if(pitchDetectionResult.getPitch() != -1){;
             double timeStamp = audioEvent.getTimeStamp();
             float pitch = pitchDetectionResult.getPitch();
-            System.out.println(pitch*2);
 
             // Detect the guitar string with the closest freq to the audio freq
             if(autoModeSelected){
-                recordBtnAction.updatePitchDial(pitch);
                 float diff = 0;
                 for(Float tuning: stdTunings.keySet()){
                     diff = Math.abs(tuning - (pitch*2));
@@ -76,7 +73,7 @@ public class Pitch implements PitchDetectionHandler {
                         closestNote = tuning;
                     }
                 }
-
+                recordBtnAction.updatePitchDial(diff * 10);
                 recordBtnAction.updateLabel((String.format("%s\n", stdTunings.get(closestNote))));
             }
             // Detect how the close audio freq is to selected string freq
@@ -91,12 +88,8 @@ public class Pitch implements PitchDetectionHandler {
                     }
                 }
                 float diff = pitch*2 - targetFrequency;
-                if(Math.abs(diff) > 10){
-                    recordBtnAction.updateLabel("");
-                }
-                else{
-                    recordBtnAction.updateLabel(round(diff, 2));
-                }
+                recordBtnAction.updateLabel(stdTunings.get(targetFrequency));
+                recordBtnAction.updatePitchDial(diff * DIAL_SENSITIVITY);
             }
         }
     }

@@ -9,7 +9,6 @@
         private final PitchLabel label;
         private final Mic m;
         private ArrayList<JToggleButton> buttons;
-
         private CirclePanel circlePanel;
 
         public RecordButtonAction(AudioBar bar, PitchLabel label, ArrayList<JToggleButton> buttons, CirclePanel circlePanel){
@@ -66,25 +65,6 @@
         public void updateLabel(String str){
             label.setText(str);
         }
-        public void updateLabel(float diff){
-
-            if(diff < 0.3 && diff > -0.3){
-                label.setFontSize(50);
-                label.setForeground(Color.GREEN);
-                label.setText("\u2714");
-            }
-            else if (diff > 0.3){
-                label.setForeground(Color.BLACK);
-                label.setFontSize(50);
-                label.setText("Tune Down. +" + diff);
-
-            }
-            else if(diff < -0.3){
-                label.setFontSize(50);
-                label.setForeground(Color.BLACK);
-                label.setText("Tune Up. " + diff);
-            }
-        }
         public void updateAudioBar(float rms) {
             bar.setAmplitude(rms);
         }
@@ -93,6 +73,11 @@
         }
 
         public void updatePitchDial(float freq){
-            circlePanel.setTargetAngle(freq);
+            if(freq < -30){
+                circlePanel.setTargetAngle(-90);
+            }
+            else {
+                circlePanel.setTargetAngle(freq);
+            }
         }
     }

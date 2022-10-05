@@ -45,9 +45,9 @@ public class App {
 
                 // Pitch Detection Panel
                 CirclePanel circlePanel = new CirclePanel(300,300);
-                PitchLabel pitchLabel = new PitchLabel("Pitch", SwingConstants.CENTER);
-                circlePanel.setLayout(new GridBagLayout());
-                circlePanel.add(pitchLabel);
+                circlePanel.setLayout(new BorderLayout());
+                PitchLabel pitchLabel = new PitchLabel("Pitch", 0);
+                circlePanel.add(pitchLabel, BorderLayout.SOUTH);
 
                 // Auto button
                 SwitchButton autoBtn = new SwitchButton(null);
