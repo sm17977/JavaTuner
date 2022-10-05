@@ -9,25 +9,25 @@ import java.awt.geom.Point2D;
 public class CirclePanel extends JPanel {
     private final Ellipse2D circleBackground;
     private final Dimension preferredSize;
-    private float angle;
-    private float targetAngle;
+    private float dialAngle;
+    private float targetDialAngle;
 
     public CirclePanel(int width, int height){
         this.circleBackground = new Ellipse2D.Double(0, 0, width, height);
         this.preferredSize = new Dimension(width, height);
         setOpaque(false);
-        angle = 0;
-        targetAngle = 0;
+        dialAngle = 0;
+        targetDialAngle = 0;
         Timer timer = new Timer(1, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (angle == targetAngle) {
+                if (dialAngle == targetDialAngle) {
                     return;
                 }
-                if (angle < targetAngle) {
-                    angle += 1;
+                if (dialAngle < targetDialAngle) {
+                    dialAngle += 1;
                 } else {
-                    angle -= 1;
+                    dialAngle -= 1;
                 }
                 repaint();
             }
@@ -37,7 +37,7 @@ public class CirclePanel extends JPanel {
     }
 
     public void setTargetAngle(float angle){
-        this.targetAngle = angle;
+        this.targetDialAngle = angle;
     }
 
     @Override
@@ -70,16 +70,18 @@ public class CirclePanel extends JPanel {
         Polygon dialArm = new Polygon(new int[]{(int) leftBasePoint.getX(), (int) rightBasePoint.getX(), (int) topPoint.getX()},
                 new int[]{(int) leftBasePoint.getY(), (int) rightBasePoint.getY(), (int) topPoint.getY()}, 3);
 
-        if(targetAngle > 90){
-            targetAngle = 90;
+        int maxDialAngle = 90;
+        if(targetDialAngle > maxDialAngle){
+            targetDialAngle = maxDialAngle;
         }
-        if(targetAngle < -90){
-            targetAngle = -90;
+        int minDialAngle = -90;
+        if(targetDialAngle < minDialAngle){
+            targetDialAngle = minDialAngle;
         }
 
         AffineTransform transform = new AffineTransform();
         transform.translate(panelCenterX, panelCenterY);
-        transform.rotate(Math.toRadians(angle));
+        transform.rotate(Math.toRadians(dialAngle));
         transform.translate(-panelCenterX, -panelCenterY);
         Shape dial = transform.createTransformedShape(dialArm);
 

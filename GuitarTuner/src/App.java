@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 public class App {
     public static void main(String[] args) {
-
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -77,13 +76,13 @@ public class App {
                 btnGroup.add(string6Btn);
                 btnGroup.add(autoBtn);
 
-                Action recordBtnAction = new RecordButtonAction(bar, pitchLabel, btnGroup, circlePanel);
+                Action recordBtnAction = new ButtonController(bar, pitchLabel, btnGroup, circlePanel);
 
                 for(JToggleButton btn : btnGroup){
                     btn.addActionListener(recordBtnAction);
                 }
 
-                autoBtn.timer.start();
+                autoBtn.animationTimer.start();
                 autoBtn.setSelected(true);
                 autoBtn.setEnabled(false);
 

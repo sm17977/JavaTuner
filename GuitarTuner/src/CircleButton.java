@@ -7,59 +7,19 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 
 public class CircleButton extends JToggleButton  {
-    private Font f;
-    private boolean mouseOver = false;
-    private boolean mousePressed = false;
-    private App app;
-
-
     public CircleButton(String text, Action action, String name){
         setName(name);
         setAction(action);
-        setFont(f = new Font("Segoe UI", Font.PLAIN, 60));
+        setFont(new Font("Segoe UI", Font.PLAIN, 60));
         setText(text);
         setOpaque(false);
         setFocusPainted(false);
         setBorderPainted(false);
         setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        MouseAdapter mouseListener = new MouseAdapter(){
-
-            @Override
-            public void mousePressed(MouseEvent me){
-                if(contains(me.getX(), me.getY())){
-                    mousePressed = true;
-                    repaint();
-                }
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent me){
-                mousePressed = false;
-                repaint();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent me){
-                mouseOver = false;
-                mousePressed = false;
-                repaint();
-            }
-
-            @Override
-            public void mouseMoved(MouseEvent me){
-                mouseOver = contains(me.getX(), me.getY());
-                repaint();
-            }
-        };
-
-        addMouseListener(mouseListener);
-        addMouseMotionListener(mouseListener);
     }
 
     private int getDiameter(){
-        int diameter = Math.min(getWidth(), getHeight());
-        return diameter;
+        return Math.min(getWidth(), getHeight());
     }
 
     @Override
@@ -93,7 +53,5 @@ public class CircleButton extends JToggleButton  {
         int minDiameter = 10 + Math.max(metrics.stringWidth(getText()), metrics.getHeight());
         return new Dimension(minDiameter, minDiameter);
     }
-
-
 }
 

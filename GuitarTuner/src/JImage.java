@@ -3,12 +3,8 @@ import javax.imageio.ImageReader;
 import javax.imageio.stream.FileImageInputStream;
 import javax.imageio.stream.ImageInputStream;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +17,6 @@ public class JImage extends JPanel{
     private int x = 0;
     private int y = 0;
     Color red;
-
 
     public JImage(File file, int w_margin, int h_margin){
         //setBorder(BorderFactory.createLineBorder(Color.black));
@@ -42,19 +37,15 @@ public class JImage extends JPanel{
         }
     }
 
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.drawImage(imgShadow, x+5, y+5, null, null);
         g2.drawImage(img, x, y, null, null);
-
-
     }
 
     public static Dimension getImageDimension(File file) throws IOException{
-
         int pos = file.getName().lastIndexOf(".");
         if (pos == -1)
             throw new IOException("No extension for file: " + file.getAbsolutePath());
@@ -74,7 +65,6 @@ public class JImage extends JPanel{
                 reader.dispose();
             }
         }
-
         throw new IOException("Not a known image file: " + file.getAbsolutePath());
     }
 
@@ -94,7 +84,4 @@ public class JImage extends JPanel{
         }
         return image;
     }
-
-
-
 }

@@ -1,22 +1,19 @@
     import javax.swing.*;
-    import java.awt.*;
     import java.awt.event.ActionEvent;
     import java.util.ArrayList;
-    import java.util.Objects;
 
-    public class RecordButtonAction extends AbstractAction {
+    public class ButtonController extends AbstractAction {
         private final AudioBar bar;
         private final PitchLabel label;
-        private final Mic m;
-        private ArrayList<JToggleButton> buttons;
+        private final ArrayList<JToggleButton> buttons;
         private CirclePanel circlePanel;
 
-        public RecordButtonAction(AudioBar bar, PitchLabel label, ArrayList<JToggleButton> buttons, CirclePanel circlePanel){
+        public ButtonController(AudioBar bar, PitchLabel label, ArrayList<JToggleButton> buttons, CirclePanel circlePanel){
             this.bar = bar;
             this.label = label;
             this.buttons = buttons;
             this.circlePanel = circlePanel;
-            m = new Mic(RecordButtonAction.this);
+            Mic m = new Mic(ButtonController.this);
         }
 
         @Override
@@ -32,7 +29,7 @@
                         autoBtn = (SwitchButton) btn;
                         autoBtn.setEnabled(true);
                         autoBtn.setSelected(false);
-                        autoBtn.timer.start();
+                        autoBtn.animationTimer.start();
                     }
                     // Turn off all the other guitar string buttons
                     else if(!btn.getName().equals(currentBtnPressed.getName())){

@@ -5,49 +5,44 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class SwitchButton extends JToggleButton {
-    public Timer timer;
-    private float location;
-    private boolean selected;
-    private boolean mouseOver;
-    private float speed = 0.4f;
-    private boolean isAuto;
-
+    public Timer animationTimer;
+    private float switchPosition;
+    private final float switchSpeed = 0.4f;
 
     public SwitchButton(Action action){
         super.setAction(action);
         super.setOpaque(false);
         super.setName("Auto");
-        selected = isSelected();
         setBackground(Color.RED);
         setPreferredSize(new Dimension(50, 25));
         setForeground(Color.WHITE);
         setCursor(new Cursor(Cursor.HAND_CURSOR));
-        location = 2;
+        switchPosition = 2;
 
-        timer = new Timer(0, new ActionListener() {
+        animationTimer = new Timer(0, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(isSelected()){
-                    int endLocation = getWidth() - getHeight();
-                    if(location < endLocation){
-                        location += speed;
+                    int switchAnimationEndPosition = getWidth() - getHeight();
+                    if(switchPosition < switchAnimationEndPosition){
+                        switchPosition += switchSpeed;
                         repaint();
                     }
                     else{
-                        timer.stop();
-                        location = endLocation;
+                        animationTimer.stop();
+                        switchPosition = switchAnimationEndPosition;
                         repaint();
                     }
                 }
                 else{
-                    int endLocation = 2;
-                    if (location > endLocation) {
-                        location -= speed;
+                    int switchAnimationEndPosition = 2;
+                    if (switchPosition > switchAnimationEndPosition) {
+                        switchPosition -= switchSpeed;
                         repaint();
                     }
                     else{
-                        timer.stop();
-                        location = endLocation;
+                        animationTimer.stop();
+                        switchPosition = switchAnimationEndPosition;
                         repaint();
                     }
                 }
@@ -56,7 +51,7 @@ public class SwitchButton extends JToggleButton {
         addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                timer.start();
+                animationTimer.start();
             }
         });
     }
@@ -77,12 +72,12 @@ public class SwitchButton extends JToggleButton {
         g2.fillRoundRect(0,0, width, height, 25, 25);
         g2.setColor(getForeground());
         g2.setComposite(AlphaComposite.SrcOver);
-        g2.fillOval((int) location, 2, height-4, height-4);
+        g2.fillOval((int) switchPosition, 2, height-4, height-4);
 
     }
     private float getAlpha(){
         float width = getWidth() - getHeight();
-        float alpha = (location - 2) / width;
+        float alpha = (switchPosition - 2) / width;
         if (alpha < 0){
             alpha =0 ;
         }

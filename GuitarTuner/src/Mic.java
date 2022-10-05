@@ -13,13 +13,13 @@ import javax.swing.*;
 import java.util.*;
 
 public class Mic{
-    private final RecordButtonAction recordButtonAction;
+    private final ButtonController buttonController;
     private static AudioDispatcher dispatcher;
     private TargetDataLine targetLine;
     private AudioInputStream inputStream;
 
-    public Mic(RecordButtonAction recordBtnAction) {
-        this.recordButtonAction = recordBtnAction;
+    public Mic(ButtonController buttonController) {
+        this.buttonController = buttonController;
         this.initDataLines();
         this.startRecording();
     }
@@ -46,14 +46,7 @@ public class Mic{
         int overlap = 0;
 
         dispatcher = new AudioDispatcher(audioInputStream, bufferSize, overlap);
-        dispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.YIN, sampleRate, bufferSize, new Pitch(recordButtonAction)));
+        dispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.YIN, sampleRate, bufferSize, new Pitch(buttonController)));
         new Thread(dispatcher, "Mic Audio Dispatch Thread").start();
-
-    }
-
-    public void stopRecording(){
-        dispatcher.stop();
-        targetLine.close();
-        targetLine.stop();
     }
 }
