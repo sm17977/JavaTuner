@@ -28,8 +28,10 @@ A desktop GUI Guitar Tuner developed with Java Swing
 8. Add auto mode button :heavy_check_mark:
 9. Code auto and manual mode in Pitch detection class
 10. Add sound bar to visualise microphone feedback :heavy_check_mark:
-11. Make sound bar look pretty
-12. Add menu bar for selecting alternative tunings
+12. Add frequency guage graphic 
+13. Implement dial on frequency guage to point to current frequency of input
+14. Make sound bar look pretty
+15. Add menu bar for selecting alternative tunings
 
 ## Resources
 FlatLaf Swing UI Theme: https://www.formdev.com/flatlaf/
