@@ -3,7 +3,6 @@ import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
 
 import javax.swing.*;
-import java.math.BigDecimal;
 import java.util.ArrayDeque;
 import java.util.Map;
 import java.util.Optional;
@@ -28,7 +27,7 @@ public class Pitch implements PitchDetectionHandler {
     private double avgPreviousRMSUnits = 0;
     public Pitch(ButtonController buttonController){
         this.buttonController = buttonController;
-        previousRMSUnits = new ArrayDeque<Double>();
+        previousRMSUnits = new ArrayDeque<>();
         autoModeSelected = true;
     }
 
@@ -57,9 +56,11 @@ public class Pitch implements PitchDetectionHandler {
             buttonController.updateAudioBar((float) (audioEvent.getRMS() + MIC_AMBIENCE_RMS) * 20);
         }
 
-        if(pitchDetectionResult.getPitch() != -1){;
+        if(pitchDetectionResult.getPitch() != -1){
             double timeStamp = audioEvent.getTimeStamp();
             float pitch = pitchDetectionResult.getPitch();
+
+
 
             // Detect the guitar string with the closest freq to the audio freq
             if(autoModeSelected){
@@ -86,6 +87,7 @@ public class Pitch implements PitchDetectionHandler {
                     }
                 }
                 float diff = pitch*2 - targetFrequency;
+                System.out.println("diff: " + diff * DIAL_SENSITIVITY);
                 buttonController.updateLabel(standardTuningFreqs.get(targetFrequency));
                 buttonController.updatePitchDial(diff * DIAL_SENSITIVITY);
             }

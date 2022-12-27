@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
 public class CirclePanel extends JPanel {
@@ -11,6 +12,8 @@ public class CirclePanel extends JPanel {
     private final Dimension preferredSize;
     private float dialAngle;
     private float targetDialAngle;
+
+    private static final int DEGREES_PER_TICK = 10;
 
     public CirclePanel(int width, int height){
         this.circleBackground = new Ellipse2D.Double(0, 0, width, height);
@@ -56,6 +59,28 @@ public class CirclePanel extends JPanel {
         double panelCenterY = getHeight() / 2f;
         double dialCenterDiameter = 30;
         double dialCenterRadius = dialCenterDiameter/2;
+
+        // Draw border interval ticks
+        g2.setColor(Color.BLACK);
+        g2.drawOval(3, 3, 294, 294);
+       // g2.drawLine();
+        double panelRadius = getWidth() / 2f;
+        g2.setStroke(new BasicStroke(1));
+
+        for(int theta = 0; theta <= 360; theta += DEGREES_PER_TICK){
+            if(theta >= 180) {
+                // Calculate point on a circle using x = r * cos(theta), y = r * cos(theta)
+                Point2D pointOnCircle = new Point((int) ((panelRadius * Math.cos(Math.toRadians(theta))) + panelRadius), (int) ((panelRadius * Math.sin(Math.toRadians(theta))) + panelRadius));
+                // Add radius because the origin of the panel is not the center, and it needs to be for this formula
+                Line2D line = new Line2D.Double(1.0, 1.0, 1.0, 1.0);
+                g2.drawLine((int) (pointOnCircle.getX()), (int) (pointOnCircle.getY()), (int) panelCenterX, (int) panelCenterY);
+            }
+        }
+
+        g2.setColor(Color.WHITE);
+        g2.fillOval((int)panelRadius - 140, (int)panelRadius - 140, 280, 280);
+
+
 
         g2.setColor(Color.RED);
         Ellipse2D dialCenter = new Ellipse2D.Double(panelCenterX - dialCenterRadius, panelCenterY - dialCenterRadius, dialCenterDiameter, dialCenterDiameter);
