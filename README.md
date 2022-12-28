@@ -12,7 +12,7 @@ A desktop GUI Guitar Tuner developed with Java Swing
 * Classify current pitch in relation to current string + tuning selection
 
 ## Screenshot of current progress:
-![Screenshot](https://i.imgur.com/o8r1czv.png)
+![Screenshot](https://i.imgur.com/jWJhhIb.png)
 
 ## To do
 1. Define MVC structure :heavy_check_mark:
