@@ -1,3 +1,6 @@
+import org.apache.commons.math4.legacy.linear.ArrayRealVector;
+import org.apache.commons.math4.legacy.linear.RealVector;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,7 +10,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
 public class FrequencyGauge extends JPanel {
-    private static final int DEGREES_PER_TICK = 10;
+    private static final int DEGREES_PER_TICK = 15;
     private final Ellipse2D gaugeBackground;
     private final Dimension preferredSize;
     private float dialAngle;
@@ -43,6 +46,10 @@ public class FrequencyGauge extends JPanel {
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         RenderingHints hints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        hints.add(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
+        hints.add(new RenderingHints(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE));
+        hints.add(new RenderingHints(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC));
+
         g2.setRenderingHints(hints);
         g2.setStroke(new BasicStroke(3));
 
@@ -51,7 +58,6 @@ public class FrequencyGauge extends JPanel {
         double panelRadius = getWidth() / 2f;
 
         drawBackground(g2);
-        drawGaugeBorder(g2);
         drawIntervalTicks(g2, panelRadius, panelCenterX, panelCenterY);
 
         double dialCenterDiameter = 30f;
@@ -63,29 +69,43 @@ public class FrequencyGauge extends JPanel {
     }
 
     public void drawBackground(Graphics2D g2){
-        g2.setColor(Color.WHITE);
-        g2.fill(gaugeBackground);
-    }
-
-    public void drawGaugeBorder(Graphics2D g2){
         g2.setColor(Color.BLACK);
-        g2.setStroke(new BasicStroke(3));
-        g2.drawOval(2, 2, 296, 296);
+        g2.fill(gaugeBackground);
+        g2.setColor(Color.WHITE);
+        g2.fillOval((int) (gaugeBackground.getX() + 10 / 2) ,(int) (gaugeBackground.getY() + 10 / 2), (int) gaugeBackground.getWidth() - 10, (int) gaugeBackground.getHeight() - 10);
     }
 
     public void drawIntervalTicks(Graphics2D g2, double panelRadius, double panelCenterX, double panelCenterY){
 
+        g2.setColor(Color.BLACK);
         g2.setStroke(new BasicStroke(1));
+
+        int tickLength = 20;
+        int labelDistFromTick = 35;
+
         for(int theta = 0; theta <= 360; theta += DEGREES_PER_TICK){
+
             if(theta >= 180) {
+
                 // Calculate point on a circle using x = r * cos(theta), y = r * cos(theta)
                 Point2D pointOnCircle = new Point((int) ((panelRadius * Math.cos(Math.toRadians(theta))) + panelRadius), (int) ((panelRadius * Math.sin(Math.toRadians(theta))) + panelRadius));
-                g2.drawLine((int) (pointOnCircle.getX()), (int) (pointOnCircle.getY()), (int) panelCenterX, (int) panelCenterY);
+
+                double tickX = (panelRadius - tickLength) * Math.cos(Math.toRadians(theta));
+                double tickY = (panelRadius - tickLength) * Math.sin(Math.toRadians(theta));
+                g2.drawLine((int) (pointOnCircle.getX()), (int) (pointOnCircle.getY()), (int) (panelCenterX + tickX), (int) (panelCenterY + tickY));
+
+                g2.setColor(Color.BLACK);
+                FontMetrics fontMetrics = g2.getFontMetrics(getFont());
+                double centeredTextX = (fontMetrics.stringWidth(Integer.toString(theta)) / 2f);
+                double centeredTextY = (fontMetrics.getHeight() / 4f);
+
+                double labelX = (panelRadius - labelDistFromTick) * Math.cos(Math.toRadians(theta));
+                double labelY = (panelRadius - labelDistFromTick) * Math.sin(Math.toRadians(theta));
+
+                g2.drawString(Integer.toString(theta), (int) ((panelCenterX + labelX) - centeredTextX), (int) ((panelCenterY + labelY) + centeredTextY));
+
             }
         }
-        // Draw a white oval over the center of the gauge to cutoff tick line length, fix this in future using vectors?
-        g2.setColor(Color.WHITE);
-        g2.fillOval((int)panelRadius - 140, (int)panelRadius - 140, 280, 280);
     }
 
     public void drawDial(Graphics2D g2, double dialCenterRadius, double dialCenterDiameter, double panelCenterX, double panelCenterY){

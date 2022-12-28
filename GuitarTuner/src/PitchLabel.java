@@ -7,7 +7,7 @@ public class PitchLabel extends JLabel {
     public PitchLabel(String text, int horizontalAlignment) {
         super(text, horizontalAlignment);
         setOpaque(false);
-        Font f = new Font("SansSerif", Font.PLAIN, 80);
+        Font f = new Font("SansSerif", Font.PLAIN, 65);
         this.setFont(f);
 
     }
