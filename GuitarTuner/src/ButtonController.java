@@ -6,13 +6,13 @@
         private final AudioBar bar;
         private final PitchLabel label;
         private final ArrayList<JToggleButton> buttons;
-        private CirclePanel circlePanel;
+        private FrequencyGauge frequencyGauge;
 
-        public ButtonController(AudioBar bar, PitchLabel label, ArrayList<JToggleButton> buttons, CirclePanel circlePanel){
+        public ButtonController(AudioBar bar, PitchLabel label, ArrayList<JToggleButton> buttons, FrequencyGauge frequencyGauge){
             this.bar = bar;
             this.label = label;
             this.buttons = buttons;
-            this.circlePanel = circlePanel;
+            this.frequencyGauge = frequencyGauge;
             Mic m = new Mic(ButtonController.this);
         }
 
@@ -71,10 +71,10 @@
 
         public void updatePitchDial(float freq){
             if(freq < -30){
-                circlePanel.setTargetAngle(-90);
+                frequencyGauge.setTargetAngle(-90);
             }
             else {
-                circlePanel.setTargetAngle(freq);
+                frequencyGauge.setTargetAngle(freq);
             }
         }
     }

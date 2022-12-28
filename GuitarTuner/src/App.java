@@ -43,10 +43,10 @@ public class App {
                 bar.setPreferredSize(new Dimension((int) (mainFrame.getWidth() * 0.8), 20));
 
                 // Pitch Detection Panel
-                CirclePanel circlePanel = new CirclePanel(300,300);
-                circlePanel.setLayout(new BorderLayout());
+                FrequencyGauge frequencyGauge = new FrequencyGauge(300,300);
+                frequencyGauge.setLayout(new BorderLayout());
                 PitchLabel pitchLabel = new PitchLabel("Pitch", 0);
-                circlePanel.add(pitchLabel, BorderLayout.SOUTH);
+                frequencyGauge.add(pitchLabel, BorderLayout.SOUTH);
 
                 // Auto button
                 SwitchButton autoBtn = new SwitchButton(null);
@@ -76,7 +76,7 @@ public class App {
                 btnGroup.add(string6Btn);
                 btnGroup.add(autoBtn);
 
-                Action recordBtnAction = new ButtonController(bar, pitchLabel, btnGroup, circlePanel);
+                Action recordBtnAction = new ButtonController(bar, pitchLabel, btnGroup, frequencyGauge);
 
                 for(JToggleButton btn : btnGroup){
                     btn.addActionListener(recordBtnAction);
@@ -99,7 +99,7 @@ public class App {
                 mainFrame.add(string6Btn, "gapleft 30");
                 mainFrame.add(autoBtnPanel, "gapleft 35, wrap");
                 mainFrame.add(guitarImg, String.format("w %d!, h %d!, split", guitarImg.getWidth(), guitarImg.getHeight()));
-                mainFrame.add(circlePanel, "wrap");
+                mainFrame.add(frequencyGauge, "wrap");
                 mainFrame.add(bar);
 
                 mainFrame.setJMenuBar(menuBar);
