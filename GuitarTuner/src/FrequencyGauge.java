@@ -7,17 +7,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
 public class FrequencyGauge extends JPanel {
     private static final int DEGREES_PER_TICK = 15;
     private final Ellipse2D gaugeBackground;
+    private final Ellipse2D gaugeForeground;
     private final Dimension preferredSize;
     private float dialAngle;
     private float targetDialAngle;
 
     public FrequencyGauge(int width, int height){
-        this.gaugeBackground = new Ellipse2D.Double(0, 0, width, height);
+        this.gaugeBackground = new Ellipse2D.Double(0.0, 0.0, width, height);
+        this.gaugeForeground = new Ellipse2D.Double(2.5, 2.5, width - 5.0, height - 5.0);
         this.preferredSize = new Dimension(width, height);
         setOpaque(false);
         dialAngle = 0;
@@ -51,7 +54,7 @@ public class FrequencyGauge extends JPanel {
         hints.add(new RenderingHints(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC));
 
         g2.setRenderingHints(hints);
-        g2.setStroke(new BasicStroke(3));
+        g2.setStroke(new BasicStroke(1));
 
         double panelCenterX = getWidth() / 2f;
         double panelCenterY = getHeight() / 2f;
@@ -72,7 +75,8 @@ public class FrequencyGauge extends JPanel {
         g2.setColor(Color.BLACK);
         g2.fill(gaugeBackground);
         g2.setColor(Color.WHITE);
-        g2.fillOval((int) (gaugeBackground.getX() + 10 / 2) ,(int) (gaugeBackground.getY() + 10 / 2), (int) gaugeBackground.getWidth() - 10, (int) gaugeBackground.getHeight() - 10);
+        g2.fill(gaugeForeground);
+        //g2.fillOval((int) (gaugeBackground.getX() + 10 / 2) ,(int) (gaugeBackground.getY() + 10 / 2), (int) gaugeBackground.getWidth() - 10, (int) gaugeBackground.getHeight() - 10);
     }
 
     public void drawIntervalTicks(Graphics2D g2, double panelRadius, double panelCenterX, double panelCenterY){
@@ -88,13 +92,12 @@ public class FrequencyGauge extends JPanel {
             if(theta >= 180) {
 
                 // Calculate point on a circle using x = r * cos(theta), y = r * cos(theta)
-                Point2D pointOnCircle = new Point((int) ((panelRadius * Math.cos(Math.toRadians(theta))) + panelRadius), (int) ((panelRadius * Math.sin(Math.toRadians(theta))) + panelRadius));
+                Point2D pointOnCircle = new Point2D.Double((panelRadius * Math.cos(Math.toRadians(theta)) + panelRadius), (panelRadius * Math.sin(Math.toRadians(theta))) + panelRadius);
 
                 double tickX = (panelRadius - tickLength) * Math.cos(Math.toRadians(theta));
                 double tickY = (panelRadius - tickLength) * Math.sin(Math.toRadians(theta));
-                g2.drawLine((int) (pointOnCircle.getX()), (int) (pointOnCircle.getY()), (int) (panelCenterX + tickX), (int) (panelCenterY + tickY));
+                g2.draw(new Line2D.Double(pointOnCircle.getX(), pointOnCircle.getY(), panelCenterX + tickX, panelCenterY + tickY));
 
-                g2.setColor(Color.BLACK);
                 FontMetrics fontMetrics = g2.getFontMetrics(getFont());
                 double centeredTextX = (fontMetrics.stringWidth(Integer.toString(theta)) / 2f);
                 double centeredTextY = (fontMetrics.getHeight() / 4f);
@@ -103,7 +106,6 @@ public class FrequencyGauge extends JPanel {
                 double labelY = (panelRadius - labelDistFromTick) * Math.sin(Math.toRadians(theta));
 
                 g2.drawString(Integer.toString(theta), (int) ((panelCenterX + labelX) - centeredTextX), (int) ((panelCenterY + labelY) + centeredTextY));
-
             }
         }
     }
